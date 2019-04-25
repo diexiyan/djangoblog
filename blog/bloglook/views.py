@@ -3,12 +3,15 @@ from .models import *
 from django.http import HttpResponseRedirect
 # Create your views here.
 import datetime
+import markdown
 
 
-def index(request, tid=None, type=None):
+def index(request, num=1, tid=None, type=None, ):
     """首页"""
     # 所有文章
-    arilist = Article.objects.all()
+    num = int(num)
+    arilist = Article.objects.all()[4*(num-1):4*num]
+
     if type !="":
         # print('***************************************************')
         if type == '1':
@@ -24,10 +27,10 @@ def index(request, tid=None, type=None):
             # nowyear.
             # print('...................根据时间............................')
             arilist = Article.objects.all().filter(atime__year=inta).filter(atime__month=int(tid))
-    # print('文章信息列表------------------->', arilist)
+    print('文章信息列表------------------->', arilist)
     # 最新文章
     # lastestlist = arilist.order_by('-atime').all()
-    lastestlist = Article.objects.all().order_by('-atime').all()
+    lastestlist = Article.objects.all().order_by('-atime').all()[:3]
     # 归档
     time = datetime.datetime.now()
     # print('最新文章列表------------------->', lastestlist)
@@ -37,10 +40,13 @@ def index(request, tid=None, type=None):
     # 标签云
     taglist = Tag.objects.all()
     # print('标签列表------------------->', taglist)
+    # 页码
+    numb = arilist.count()/4
+    print('................................', numb, num)
     return render(request, 'bloglook/index.html',
                   {'arilist': arilist,'typelist': typelist,
                    'taglist': taglist,'lastestlist': lastestlist,
-                   'time': time,
+                   'time': time,'num': num, 'numb': numb,
                    })
 
 
@@ -56,8 +62,7 @@ def show(request, aid):
     # 最新文章
     # 归档
     time = datetime.datetime.now()
-    # lastestlist = arilist.order_by('-atime').all()
-    lastestlist = Article.objects.all().order_by('-atime').all()
+    lastestlist = Article.objects.all().order_by('-atime').all()[:3]
     # 分类
     typelist = ArticleType.objects.all()
     # 标签云
@@ -92,11 +97,11 @@ def type(request, typeid):
     :param typeid: 分类标识
     :return:
     """
-    return HttpResponseRedirect('/blog/'+typeid+'/1')
+    return HttpResponseRedirect('/blog/1/'+typeid+'/1')
 
 
 def tag(request, tagid):
-    return HttpResponseRedirect('/blog/'+tagid+'/1')
+    return HttpResponseRedirect('/blog/1/'+tagid+'/1')
 
 
 def pubcom(request, aid):
@@ -107,6 +112,12 @@ def pubcom(request, aid):
     com.curl = request.POST['url']
     com.ctext = request.POST['comment']
     com.save()
+    com.ctext = markdown.markdown(com.ctext, extensions=[
+        'markdown.extensions.extra',
+        'markdown.extensions.codehilite',
+        'markdown.extensions.toc',
+    ])
+    # com.save()
     return HttpResponseRedirect(reverse('bloglook:show', args=[aid, ]))
 
 
@@ -117,4 +128,4 @@ def time(request, month):
     :param month: 当年月份
     :return:
     """
-    return HttpResponseRedirect('/blog/'+month+'/3')
+    return HttpResponseRedirect('/blog/1/'+month+'/3')

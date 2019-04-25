@@ -39,7 +39,7 @@
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="cl-effect-11"><a href="{% url 'bloglook:index' '' '' %}" data-hover="首页">首页</a></li>
+                            <li class="cl-effect-11"><a href="{% url 'bloglook:index' '1' '' '' %}" data-hover="首页">首页</a></li>
                             <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>
                             <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>
                             <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>
@@ -195,15 +195,21 @@
                 -->
                 <div class="pagination">
                     <ul>
-                        <li><a href="">1</a></li>
-                        <li><a href="">...</a></li>
-                        <li><a href="">4</a></li>
-                        <li><a href="">5</a></li>
+                        <li><a href="{% url 'bloglook:index' '1' '' '' %}">首页</a></li>
+
+                        <li><a href="{% url 'bloglook:index' num '' '' %}">{% if num|add:-2 > 0 %}{{ num|add:-2 }}{% endif %}</a></li>
+                        <li><a href="{% url 'bloglook:index' num|add:-1 '' '' %}">{% if num|add:-1 > 0 %}{{ num|add:-1 }}{% endif %}</a></li>
+                        <li><a href="{% url 'bloglook:index' num '' '' %}">{{ num }}</a></li>
+                        <li><a href="{% url 'bloglook:index' num|add:1 '' '' %}">{% if num|add:1.1 <= numb|add:1 %}{{ num|add:1 }}{% endif %}</a></li>
+                        <li><a href="{% url 'bloglook:index' num|add:2 '' '' %}">{% if num|add:2 <= numb|add:1 %}{{ num|add:2 }}{% endif %}</a></li>
+{#                        <li><a href="">{% if num-2 > 0 %}{{ num|add:-2 }}{% endif %}</a></li>#}
+{#                        <li><a href="">4</a></li>#}
+{#                        <li><a href="">5</a></li>#}
                         <li class="current"><a href="">6</a></li>
-                        <li><a href="">7</a></li>
-                        <li><a href="">8</a></li>
-                        <li><a href="">...</a></li>
-                        <li><a href="">11</a></li>
+{#                        <li><a href="">7</a></li>#}
+{#                        <li><a href="">8</a></li>#}
+{#                        <li><a href="">...</a></li>#}
+{#                        <li><a href="">11</a></li>#}
                     </ul>
                 </div>
             </main>
@@ -258,7 +264,7 @@
                     {% endif %}
                 </div>
                 <div class="rss">
-                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                    <a href="{% url 'bloglook:rss' %}"><span class="ion-social-rss-outline"></span> RSS 订阅</a>
                 </div>
             </aside>
         </div>

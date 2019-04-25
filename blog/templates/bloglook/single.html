@@ -39,7 +39,7 @@
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="cl-effect-11"><a href="{% url 'bloglook:index' '' '' %}" data-hover="首页">首页</a></li>
+                            <li class="cl-effect-11"><a href="{% url 'bloglook:index' '1' '' '' %}" data-hover="首页">首页</a></li>
                             <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>
                             <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>
                             <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>
@@ -150,7 +150,7 @@
                             <span class="nickname">{{ com.cpeo }}</span>
                             <time class="submit-date" datetime="2012-11-09T23:15:57+00:00">{{ com.ctime }}</time>
                             <div class="text">
-                                {{ com }}
+                                {{ com|safe }}
                             </div>
                         {% empty %}
 
@@ -225,7 +225,6 @@
                 </div>
                 <div class="widget widget-archives">
                     <h3 class="widget-title">归档</h3>
-                    <h3 class="widget-title">归档</h3>
                     <ul>
                         <li>
                             <a href="{% url 'bloglook:time' time.month %}">{{ time.year }} 年 {{ time.month }} 月</a>
@@ -265,7 +264,7 @@
                     {% endif %}
                 </div>
                 <div class="rss">
-                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                    <a href="{% url 'bloglook:rss' %}"><span class="ion-social-rss-outline"></span> RSS 订阅</a>
                 </div>
             </aside>
         </div>
